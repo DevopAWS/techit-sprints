@@ -14,95 +14,64 @@ pipeline {
     }
     // build
     stages {
-        stage('Initializing Terraform'){
-            steps{
-                script{
-                    dir('sprint1-task4'){
-                        sh 'terraform init -reconfigure'
-                    }
-                }
+        stage('Init') {
+            steps {
+                sh """
+                    cd 02-task4
+                    terraform init -reconfigure
+                """
             }
         }
-        stage('Formatting Terraform Code'){
-            steps{
-                script{
-                    dir('sprint1-task4'){
-                        sh 'terraform fmt'
-                    }
-                }
+        stage('Plan') {
+            steps {
+                sh """
+                    cd 02-task4
+                    terraform plan
+                """
             }
         }
-        stage('Validating Terraform'){
-            steps{
-                script{
-                    dir('sprint1-task4'){
-                        sh 'terraform validate'
-                    }
+        stage('Deploy') {
+            when {
+                expression { 
+                    params.action == 'apply'
                 }
+            }
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                // submitter "alice,bob"
+                // parameters {
+                //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+                // }
+            }
+            steps {
+                sh """
+                    cd 02-task4
+                    terraform apply -auto-approve
+                """
             }
         }
-        stage('Previewing the Infra using Terraform'){
-            steps{
-                script{
-                    dir('sprint1-task4'){
-                        sh 'terraform plan'
-                    }
+        stage('Destroy') {
+            when {
+                expression { 
+                    params.action == 'destroy'
                 }
+            }
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                // submitter "alice,bob"
+                // parameters {
+                //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+                // }
+            }
+            steps {
+                sh """
+                    cd 02-task4
+                    terraform destroy -auto-approve
+                """
             }
         }
-        // stage('Creating/Destroying an EKS Cluster'){
-        //     steps{
-        //         script{
-        //             dir('sprint1-task4') {
-        //                 sh 'terraform $action --auto-approve'
-        //             }
-        //         }
-        //     }
-        // }
-         stage('Deploy') {
-             when {
-                 expression { 
-                     params.action == 'apply'
-                 }
-             }
-             input {
-                 message "Should we continue?"
-                 ok "Yes, we should."
-                 // submitter "alice,bob"
-                 // parameters {
-                 //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-                 // }
-             }
-             steps {
-                script{
-                    dir('sprint1-task4') {
-                        sh 'terraform $action --auto-approve'
-                    }
-                }
-            }
-         }
-         stage('Destroy') {
-             when {
-                 expression { 
-                     params.action == 'destroy'
-                 }
-             }
-             input {
-                 message "Should we continue?"
-                 ok "Yes, we should."
-                 // submitter "alice,bob"
-                 // parameters {
-                 //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-                 // }
-             }
-             steps {
-                 script{
-                    dir('sprint1-task4') {
-                        sh 'terraform $action --auto-approve'
-                    }
-                }
-             }
-         }
     }
     // post build
     post { 
