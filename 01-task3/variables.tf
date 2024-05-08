@@ -1,5 +1,5 @@
 variable "vpc_id" {
-  default = "my-vpc"
+  default = "jenkins-vpc"
 }
 
 variable "vpc_cidr" {

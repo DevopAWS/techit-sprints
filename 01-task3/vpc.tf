@@ -1,7 +1,7 @@
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "jenkins-vpc"
+  name = var.vpc_id
   cidr = var.vpc_cidr
 
   azs = var.azs
