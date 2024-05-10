@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket         = "daws76-remote-state"
-    key            = "terraform-eks"
+    key            = "terraform-eks-taks5"
     region         = "us-east-1"
     dynamodb_table = "daws76-locking"
   }
