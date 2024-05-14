@@ -72,7 +72,7 @@ pipeline {
                 """
             }
         }
-        stage('Deployement Aoolication') {
+        stage('Deployement Application') {
             steps {
                 sh """
                     cd 02-task4/ConfigurationFiles
