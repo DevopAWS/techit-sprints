@@ -72,17 +72,17 @@ pipeline {
                 """
             }
         }
-    }
-        stage {
+        stage('Deployement Aoolication') {
             steps {
-                script{
-                    dir('02-task4/ConfigurationFiles') {
-                        sh 'aws eks update-kubeconfig --name my-eks-cluster'
-                        sh 'kubectl apply -f namespace.yaml'
-                        sh 'kubectl apply -f pod.yaml'
-                    }
+                sh """
+                    cd 02-task4/ConfigurationFiles
+                    sh 'aws eks update-kubeconfig --name my-eks-cluster'
+                    sh 'kubectl apply -f namespace.yaml'
+                    sh 'kubectl apply -f pod.yaml'
+                """
             }
         }
+    }
     // post build
     post { 
         always { 
