@@ -72,6 +72,15 @@ pipeline {
                 """
             }
         }
+        stage('Deploying Application'){
+            steps {
+                sh """
+                    cd 02-task4
+                    sh 'kubectl apply -f namespace.yaml'
+                    sh 'kubectl apply -f pod.yaml'
+                """
+            }
+        }
     }
     // post build
     post { 
